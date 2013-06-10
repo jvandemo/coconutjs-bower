@@ -1,0 +1,1 @@
+Bower package for CoconutJS
