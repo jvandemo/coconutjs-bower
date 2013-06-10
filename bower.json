@@ -1,0 +1,9 @@
+{
+    "name": "coconutjs",
+    "version": "0.0.1",
+    "main": "./coconut.js",
+    "dependencies": {
+        "angular": "1.0.7",
+        "jquery": "~2.0.1"
+    }
+}
