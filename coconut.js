@@ -298,6 +298,70 @@ angular.module('ccnut.bootstrap');
 
 /**
  * @ngdoc directive
+ * @name jquery-ui.directive:ccnutJqueryUiDatepicker
+ *
+ * @description
+ * Creates a jQuery UI datepicker.
+ *
+ * Accepts an optional object with keys and values that are passed to the jQuery UI datepicker plugin.
+ *
+ * The value is automatically stored in the model and the slider slides to the
+ * corresponding position when the model changes.
+ *
+ * See [jQuery UI datepicker](http://jqueryui.com/datepicker/) for a list of supported options.
+ *
+ * @param {object=} ccnutJqueryUiDatepicker Object with key value pairs that are conform with jQuery UI datepicker options
+ *
+ * @example
+ <doc:example>
+ <doc:source>
+ <script>
+ function Ctrl($scope) {}
+ </script>
+ <div ng-controller="Ctrl">
+ <input type="text" ng-model="model" ccnut-jquery-ui-datepicker="{dateFormat:'dd-mm-yy'}" />
+ </div>
+ </doc:source>
+ </doc:example>
+ */
+
+angular.module('ccnut.jquery-ui.directives')
+    .directive('ccnutJqueryUiDatepicker', function factory() {
+        var defaultOptions = {
+            changeMonth: true,
+            changeYear: true,
+            maxDate: 0,
+            dateFormat: 'dd-mm-yy',
+            constrainInput: true
+        };
+
+        return {
+            restrict: 'AC',
+            require: 'ngModel',
+            link: function (scope, iElement, iAttrs, ngModelController) {
+
+                // Get options
+                var options = angular.extend({}, defaultOptions, scope.$eval(iAttrs.ccnutJqueryUiDatepicker));
+
+                // Initialize datepicker
+                iElement.datepicker(options);
+
+                // Update model on select event
+                iElement.datepicker('option', 'onSelect', function (dateText, instance) {
+                    ngModelController.$setViewValue(dateText);
+                    scope.$apply();
+                });
+
+                // Update datepicker when view needs to be updated
+                ngModelController.$render = function () {
+                    var value = (ngModelController.$viewValue || '');
+                    iElement.datepicker('setDate', value);
+                };
+
+            }
+        };
+    });/**
+ * @ngdoc directive
  * @name jquery-ui.directive:ccnutJqueryUiSlider
  *
  * @description
@@ -311,8 +375,6 @@ angular.module('ccnut.bootstrap');
  * See [jQuery UI slider](http://jqueryui.com/slider/) for a list of supported options.
  *
  * @param {object=} ccnutJqueryUiSlider Object with key value pairs that are conform with jQuery UI slider options
- *
- * Testje
  *
  * @example
  <doc:example>
@@ -336,7 +398,7 @@ angular.module('ccnut.jquery-ui.directives')
 
                 // Get options
                 var options = angular.extend({}, scope.$eval(iAttrs.ccnutJqueryUiSlider));
-console.log(options);
+
                 // Initialize slider
                 iElement.slider(options);
 
