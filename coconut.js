@@ -280,7 +280,7 @@ angular.module('ccnut.bootstrap.directives')
             link: function (scope, iElement, iAttrs) {
 
                 if (!window.$ || !window.$.fn || !window.$.fn.tooltip) {
-                    return logger.warn('Tooltip creation skipped: tooltip function not available');
+                    return logger.warn('ccnutBsTooltip directive skipped: tooltip function from Bootstrap library not available');
                 }
 
                 // Assemble options
@@ -326,7 +326,7 @@ angular.module('ccnut.bootstrap');
  */
 
 angular.module('ccnut.jquery-ui.directives')
-    .directive('ccnutJqueryUiDatepicker', function factory() {
+    .directive('ccnutJqueryUiDatepicker', ['ccnut.config', 'logger', function (ccnutConfig, logger) {
         var defaultOptions = {
             changeMonth: true,
             changeYear: true,
@@ -339,6 +339,10 @@ angular.module('ccnut.jquery-ui.directives')
             restrict: 'AC',
             require: 'ngModel',
             link: function (scope, iElement, iAttrs, ngModelController) {
+
+                if (!window.$ || !window.$.fn || !window.$.fn.datepicker) {
+                    return logger.warn('ccnutJqueryUiDatepicker directive skipped: datepicker function from jQuery UI library not available');
+                }
 
                 // Get options
                 var options = angular.extend({}, defaultOptions, scope.$eval(iAttrs.ccnutJqueryUiDatepicker));
@@ -360,7 +364,7 @@ angular.module('ccnut.jquery-ui.directives')
 
             }
         };
-    });/**
+    }]);/**
  * @ngdoc directive
  * @name jquery-ui.directive:ccnutJqueryUiSlider
  *
@@ -390,11 +394,15 @@ angular.module('ccnut.jquery-ui.directives')
  */
 
 angular.module('ccnut.jquery-ui.directives')
-    .directive('ccnutJqueryUiSlider', function factory() {
+    .directive('ccnutJqueryUiSlider', ['ccnut.config', 'logger', function (ccnutConfig, logger) {
         return {
             restrict: 'AC',
             require: 'ngModel',
             link: function (scope, iElement, iAttrs, ngModelController) {
+
+                if (!window.$ || !window.$.fn || !window.$.fn.datepicker) {
+                    return logger.warn('ccnutJqueryUiSlider directive skipped: slider function from jQuery UI library not available');
+                }
 
                 // Get options
                 var options = angular.extend({}, scope.$eval(iAttrs.ccnutJqueryUiSlider));
@@ -416,7 +424,7 @@ angular.module('ccnut.jquery-ui.directives')
 
             }
         };
-    });// Module specific configuration
+    }]);// Module specific configuration
 angular.module('ccnut.jquery-ui.directives');// Module specific configuration
 angular.module('ccnut.jquery-ui');
 
