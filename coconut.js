@@ -239,6 +239,51 @@ angular.module('ccnut.core.services')
         return service;
     }]);// Module specific configuration
 angular.module('ccnut.core.services');/**
+ * @ngdoc object
+ * @name core.service:queryStringParser
+ *
+ * @description
+ * Simple service for parsing the query string and getting quary string parameters.
+ *
+ * @example
+ <example>
+ <file name="script.js">
+ function LogCtrl($scope, queryStringParser) {
+         var value = queryStringParser('param');
+         console.log(value);
+       }
+ </file>
+ <file name="index.html">
+ <div ng-controller="LogCtrl">
+ <p>Add a query string parameter e.g. ?param=someValue to the url and view the console...</p>
+ </div>
+ </file>
+ </example>
+ */
+
+angular.module('ccnut.core.services')
+    .factory('queryStringParser', ['logger', 'ccnut.config', function (logger, ccnutConfig) {
+
+        // Create service
+        var service = {};
+
+        service.getQueryString = function () {
+            return location.search;
+        };
+
+        // Proxy regular methods to $log
+        service.getParam = function (name, defaultValue) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(this.getQueryString());
+            if (defaultValue === null) {
+                defaultValue = "";
+            }
+            return results === null ? defaultValue : decodeURIComponent(results[1].replace(/\+/g, " "));
+        };
+
+        return service;
+    }]);/**
  * @ngdoc directive
  * @name bootstrap.directive:ccnutBsTooltip
  *
